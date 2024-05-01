@@ -153,7 +153,7 @@ export default function VideoPlayer(props) {
       </TouchableOpacity>
       <View
         style={{
-          position: isPotrait ? "relative" : "absolute",
+          position: "absolute",
           bottom: 10,
           alignSelf: "center",
         }}
@@ -184,6 +184,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   controlsContainer: {
+    position: "relative",
     bottom: 10,
     alignSelf: "center",
   },
