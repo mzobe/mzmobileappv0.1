@@ -1,14 +1,41 @@
 import React, { useEffect, useRef, useState } from "react";
-import { View, Image, StyleSheet, Text } from "react-native";
+import {
+  View,
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  Dimensions,
+} from "react-native";
 import { Video } from "expo-av";
 import { Feather } from "@expo/vector-icons";
+import * as ScreenOrientation from "expo-screen-orientation";
 
 import VideoControls from "./VideoControls";
 
 export default function VideoPlayer(props) {
   const { height, width, videoUri, outOfBoundItems, item } = props;
+  const [isPotrait, setIsPotrait] = useState(true);
 
   const playbackInstance = useRef(null);
+
+  const [isControlsVisible, setIsControlsVisible] = useState(false);
+
+  function setOrientation() {
+    if (Dimensions.get("window").height > Dimensions.get("window").width) {
+      //Device is in portrait mode, rotate to landscape mode.
+      ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
+      setIsPotrait(false);
+    } else {
+      //Device is in landscape mode, rotate to portrait mode.
+      ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT);
+      setIsPotrait(true);
+    }
+  }
+
+  const handlePress = () => {
+    setIsControlsVisible(!isControlsVisible); // Toggle visibility
+  };
 
   const [playbackInstanceInfo, setPlaybackInstanceInfo] = useState({
     position: 0,
@@ -16,6 +43,19 @@ export default function VideoPlayer(props) {
     state: "Buffering",
   });
 
+  //screen orientation
+
+  // useEffect(() => {
+  //   const updateOrientation = async () => {
+  //     const newOrientation = await ScreenOrientation.getOrientationAsync();
+  //     setOrientation(newOrientation);
+  //   };
+
+  //   const subscription =
+  //     ScreenOrientation.addOrientationChangeListener(updateOrientation);
+
+  //   return () => subscription.remove(); // Cleanup subscription on unmount
+  // }, []);
   useEffect(() => {
     return () => {
       if (playbackInstance.current) {
@@ -70,8 +110,8 @@ export default function VideoPlayer(props) {
   };
 
   return (
-    <View style={{ flex: 1, marginBottom: 20 }}>
-      <View
+    <View className="flex-1 items-center">
+      {/* <View
         style={{
           flexDirection: "row",
           alignItems: "center",
@@ -99,23 +139,35 @@ export default function VideoPlayer(props) {
         <View>
           <Feather name="more-vertical" color="#fff" size={18} />
         </View>
-      </View>
-      <Video
-        ref={playbackInstance}
-        style={styles.video(width, height)}
-        source={{ uri: videoUri }}
-        resizeMode="cover"
-        // isLooping
-        onPlaybackStatusUpdate={updatePlaybackCallback}
-      />
-      <View style={styles.controlsContainer}>
-        <VideoControls
-          state={playbackInstanceInfo.state}
-          playbackInstance={playbackInstance.current}
-          playbackInstanceInfo={playbackInstanceInfo}
-          setPlaybackInstanceInfo={setPlaybackInstanceInfo}
-          togglePlay={togglePlay}
+      </View> */}
+      <TouchableOpacity onPress={handlePress}>
+        <Video
+          ref={playbackInstance}
+          style={styles.video(width, height)}
+          source={{ uri: videoUri }}
+          onFullscreenUpdate={setOrientation}
+          resizeMode="cover"
+          // isLooping
+          onPlaybackStatusUpdate={updatePlaybackCallback}
         />
+      </TouchableOpacity>
+      <View
+        style={{
+          position: isPotrait ? "relative" : "absolute",
+          bottom: 10,
+          alignSelf: "center",
+        }}
+      >
+        {isControlsVisible && (
+          <VideoControls
+            state={playbackInstanceInfo.state}
+            playbackInstance={playbackInstance.current}
+            playbackInstanceInfo={playbackInstanceInfo}
+            setPlaybackInstanceInfo={setPlaybackInstanceInfo}
+            togglePlay={togglePlay}
+            setFullScreen={setOrientation}
+          />
+        )}
       </View>
     </View>
   );
@@ -132,7 +184,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   controlsContainer: {
-    position: "absolute",
     bottom: 10,
+    alignSelf: "center",
   },
 });

@@ -1,7 +1,8 @@
 import { Dimensions, Text, View } from "react-native";
 import VideoPlayer2 from "./components/VideoPlayer2";
 import VideoPlayerView from "./components/VideoPlayerView";
-//import VideoPlayer from "./components/VideoPlayer";
+import VideoPlayer from "./components/VideoPlayer";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 const { height, width } = Dimensions.get("window");
 
@@ -16,15 +17,13 @@ const item = {
 
 export default function Page() {
   return (
-    <View className="flex-1 items-center align-center bg-white">
-      <Text className="text-red-600 text-4xl my-50 italic bold">Home page</Text>
-      {/* <VideoPlayer
-        height={height / 1.6}
+    <View className="flex-1 items-center align-center">
+      <VideoPlayer
+        height={height}
         width={width}
         videoUri={item.video}
         item={item}
-      /> */}
-      <VideoPlayerView />
+      />
     </View>
   );
 }

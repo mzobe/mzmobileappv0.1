@@ -1,9 +1,17 @@
 import React from "react";
-import { View, StyleSheet, Pressable, ActivityIndicator } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Pressable,
+  ActivityIndicator,
+  Dimensions,
+} from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 
 import Slider from "@react-native-community/slider";
+
+const dimensions = Dimensions.get("window");
 
 const VideoControls = (props) => {
   const {
@@ -12,6 +20,7 @@ const VideoControls = (props) => {
     playbackInstanceInfo,
     setPlaybackInstanceInfo,
     playbackInstance,
+    setFullScreen,
   } = props;
 
   function renderIcon() {
@@ -73,6 +82,13 @@ const VideoControls = (props) => {
             });
           }}
         />
+        <Pressable
+          style={styles.iconWrapper}
+          onPress={() => {
+            console.log("full screen");
+            setFullScreen();
+          }}
+        ></Pressable>
       </View>
     </View>
   );
@@ -85,6 +101,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   innerContainer: {
+    justifyContent: "flex-start",
     flexDirection: "row",
     alignItems: "center",
     borderRadius: 50,
