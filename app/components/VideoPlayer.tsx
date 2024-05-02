@@ -10,16 +10,16 @@ import {
 import { Video } from "expo-av";
 import { Feather } from "@expo/vector-icons";
 import * as ScreenOrientation from "expo-screen-orientation";
-
 import VideoControls from "./VideoControls";
+
+import Animated, { useSharedValue, withTiming } from "react-native-reanimated";
 
 export default function VideoPlayer(props) {
   const { height, width, videoUri, outOfBoundItems, item } = props;
   const [isPotrait, setIsPotrait] = useState(true);
-
   const playbackInstance = useRef(null);
-
   const [isControlsVisible, setIsControlsVisible] = useState(false);
+  const opacity = useSharedValue(1);
 
   function setOrientation() {
     if (Dimensions.get("window").height > Dimensions.get("window").width) {
@@ -43,7 +43,15 @@ export default function VideoPlayer(props) {
     state: "Buffering",
   });
 
-  //screen orientation
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      opacity.value = withTiming(0);
+    }, 3000);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, []);
 
   useEffect(() => {
     return () => {
@@ -105,9 +113,9 @@ export default function VideoPlayer(props) {
         justifyContent: isPotrait ? "" : "center",
       }}
     >
-      <Text style={{ color: "red" }}>
+      {/* <Text style={{ color: "red" }}>
         Potrait = {isPotrait ? "true" : "false"}
-      </Text>
+      </Text> */}
       {/* <View
         style={{
           flexDirection: "row",
@@ -151,8 +159,11 @@ export default function VideoPlayer(props) {
       <View
         style={{
           position: isPotrait ? "relative" : "absolute",
-          bottom: 10,
-          alignSelf: isPotrait ? "flex-start" : "center",
+          top: isPotrait ? -150 : 150,
+          justifyContent: "center",
+          alignItems: "center",
+          //bottom: 10,
+          //opacity,
         }}
       >
         {isControlsVisible && (
@@ -166,6 +177,9 @@ export default function VideoPlayer(props) {
           />
         )}
       </View>
+      <View className=" ml-20 mt-5">
+        <Text>Tuone tuone</Text>
+      </View>
     </View>
   );
 }
@@ -178,11 +192,6 @@ const styles = StyleSheet.create({
   }),
   container: {
     flex: 1,
-    justifyContent: "center",
-  },
-  controlsContainer: {
-    position: "relative",
-    bottom: 10,
-    alignSelf: "center",
+    //justifyContent: "center",
   },
 });

@@ -18,7 +18,7 @@ const item = {
 export default function Page() {
   return (
     <VideoPlayer
-      height={height} // give a different value for height 2/5/2023
+      height={height * 0.95}
       width={width}
       videoUri={item.video}
       item={item}

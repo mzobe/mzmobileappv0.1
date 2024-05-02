@@ -9,13 +9,6 @@ import {
 import { FontAwesome } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withTiming,
-  withRepeat,
-} from "react-native-reanimated";
-
 import Slider from "@react-native-community/slider";
 
 const dimensions = Dimensions.get("window");
