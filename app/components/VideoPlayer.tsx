@@ -45,17 +45,6 @@ export default function VideoPlayer(props) {
 
   //screen orientation
 
-  // useEffect(() => {
-  //   const updateOrientation = async () => {
-  //     const newOrientation = await ScreenOrientation.getOrientationAsync();
-  //     setOrientation(newOrientation);
-  //   };
-
-  //   const subscription =
-  //     ScreenOrientation.addOrientationChangeListener(updateOrientation);
-
-  //   return () => subscription.remove(); // Cleanup subscription on unmount
-  // }, []);
   useEffect(() => {
     return () => {
       if (playbackInstance.current) {
@@ -64,7 +53,7 @@ export default function VideoPlayer(props) {
         });
       }
     };
-  }, []);
+  }, [isPotrait]);
 
   useEffect(() => {
     playbackInstance.current.pauseAsync();
@@ -110,7 +99,15 @@ export default function VideoPlayer(props) {
   };
 
   return (
-    <View className="flex-1 items-center">
+    <View
+      style={{
+        flex: 1,
+        justifyContent: isPotrait ? "" : "center",
+      }}
+    >
+      <Text style={{ color: "red" }}>
+        Potrait = {isPotrait ? "true" : "false"}
+      </Text>
       {/* <View
         style={{
           flexDirection: "row",
@@ -153,9 +150,9 @@ export default function VideoPlayer(props) {
       </TouchableOpacity>
       <View
         style={{
-          position: "absolute",
+          position: isPotrait ? "relative" : "absolute",
           bottom: 10,
-          alignSelf: "center",
+          alignSelf: isPotrait ? "flex-start" : "center",
         }}
       >
         {isControlsVisible && (
@@ -165,7 +162,7 @@ export default function VideoPlayer(props) {
             playbackInstanceInfo={playbackInstanceInfo}
             setPlaybackInstanceInfo={setPlaybackInstanceInfo}
             togglePlay={togglePlay}
-            setFullScreen={setOrientation}
+            isPotrait={setOrientation}
           />
         )}
       </View>

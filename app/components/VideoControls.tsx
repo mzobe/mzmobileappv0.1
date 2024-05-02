@@ -9,6 +9,13 @@ import {
 import { FontAwesome } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+  withRepeat,
+} from "react-native-reanimated";
+
 import Slider from "@react-native-community/slider";
 
 const dimensions = Dimensions.get("window");
@@ -20,7 +27,7 @@ const VideoControls = (props) => {
     playbackInstanceInfo,
     setPlaybackInstanceInfo,
     playbackInstance,
-    setFullScreen,
+    isPotrait,
   } = props;
 
   function renderIcon() {
@@ -85,10 +92,14 @@ const VideoControls = (props) => {
         <Pressable
           style={styles.iconWrapper}
           onPress={() => {
-            console.log("full screen");
-            setFullScreen();
+            // if (isPotrait) {
+            console.log("change orientation");
+            isPotrait();
+            // }
           }}
-        ></Pressable>
+        >
+          <MaterialIcons name="fullscreen" size={20} color="#fff" />
+        </Pressable>
       </View>
     </View>
   );
@@ -101,14 +112,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   innerContainer: {
-    justifyContent: "flex-start",
     flexDirection: "row",
     alignItems: "center",
     borderRadius: 50,
     paddingHorizontal: 12,
     paddingRight: 20,
     width: "100%",
-    height: 66,
   },
   iconWrapper: {
     backgroundColor: "rgba(0, 0, 0, 0.2)",

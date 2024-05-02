@@ -17,13 +17,11 @@ const item = {
 
 export default function Page() {
   return (
-    <View className="flex-1 items-center align-center">
-      <VideoPlayer
-        height={height}
-        width={width}
-        videoUri={item.video}
-        item={item}
-      />
-    </View>
+    <VideoPlayer
+      height={height} // give a different value for height 2/5/2023
+      width={width}
+      videoUri={item.video}
+      item={item}
+    />
   );
 }
